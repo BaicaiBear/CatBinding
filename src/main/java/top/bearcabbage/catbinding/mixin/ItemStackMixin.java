@@ -37,7 +37,7 @@ public abstract class ItemStackMixin {
 	private void beforeInventoryTick(World world, Entity entity, int slot, boolean selected, CallbackInfo info) {
 		if (isItemBound(this.getItem(),this.getSubNbt("display")) && this.getSubNbt("CBOwner")==null && entity instanceof ServerPlayerEntity player && !player.hasPermissionLevel(2)) {
 			this.getOrCreateSubNbt("CBOwner").putString("Owner", player.getUuidAsString());
-			this.setCustomName(this.getName().copy().append(Text.literal("§a属于§6").append(player.getName()).append("§r")));
+			this.setCustomName(this.getName().copy().append(Text.literal("§a属于§6"+player.getName().getString()+"§r")));
 		}
 	}
 }

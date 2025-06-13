@@ -3,15 +3,15 @@
 	"id": "catbinding",
 	"version": "${version}",
 	"name": "CatBinding",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod helps you bind certain kinds of items to player who first gets them.",
 	"authors": [
-		"Me!"
+		"BaicaiBear"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/BaicaiBear/",
+		"sources": "https://github.com/BaicaiBear/CatBinding"
 	},
-	"license": "CC0-1.0",
+	"license": "CC BY-NC-SA 4.0",
 	"icon": "assets/catbinding/icon.png",
 	"environment": "*",
 	"entrypoints": {
