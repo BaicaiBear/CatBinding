@@ -8,6 +8,7 @@ import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.StringNbtReader;
@@ -40,6 +41,15 @@ public class CatBinding implements ModInitializer {
 		CatBindingCommands.init();
 	}
 
+	public static boolean isItemBound(Item item, NbtCompound nbt) {
+		return item != Items.AIR
+			&& BINDING_DATA.containsKey(item)
+			&& (BINDING_DATA.get(item).contains(ALL_NBT)
+				|| BINDING_DATA.get(item).contains(
+					Optional.ofNullable(nbt).orElse(EMPTY_NBT)
+				));
+    }
+
 	public static int loadBindingData() {
 		LOGGER.info("[CatBinding] Loading Cat Binding Mod");
 		HashMap<String, Set<String>> bindingReads = config.getOrDefault("Banding-Items", new HashMap<>());
@@ -71,6 +81,7 @@ public class CatBinding implements ModInitializer {
 			} else {
 				for (String itemNbt : readingNbtSet) {
 					try {
+						if (itemNbt.isEmpty()) itemNbt = EMPTY_NBT.toString();
 						NbtCompound nbt = StringNbtReader.parse(itemNbt);
 						itemNbtSet.add(nbt);
 					} catch (Exception e) {
@@ -85,7 +96,7 @@ public class CatBinding implements ModInitializer {
 		return BINDING_DATA.size();
 	}
 
-	public static int saveBindingData() {
+	public static void saveBindingData() {
 		HashMap<String, Set<String>> bindingWrites = new HashMap<>();
 		for (Map.Entry<Item, Set<NbtCompound>> entry : BINDING_DATA.entrySet()) {
 			String itemKey = Registries.ITEM.getId(entry.getKey()).toString();
@@ -94,7 +105,7 @@ public class CatBinding implements ModInitializer {
 				if (nbt.equals(ALL_NBT)) {
 					nbtSet.add(ALL_NBT.toString());
 				} else if (nbt.equals(EMPTY_NBT)) {
-					continue; // Skip empty NBT
+					nbtSet.add(EMPTY_NBT.toString());
 				} else {
 					nbtSet.add(nbt.toString());
 				}
@@ -103,7 +114,6 @@ public class CatBinding implements ModInitializer {
 		}
 		config.set("Banding-Items", bindingWrites);
 		config.save();
-		return bindingWrites.size();
 	}
 
 	private static class CBConfig {
