@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,7 +38,7 @@ public abstract class ItemStackMixin {
 	private void beforeInventoryTick(World world, Entity entity, int slot, boolean selected, CallbackInfo info) {
 		if (isItemBound(this.getItem(),this.getSubNbt("display")) && this.getSubNbt("CBOwner")==null && entity instanceof ServerPlayerEntity player && !player.hasPermissionLevel(2)) {
 			this.getOrCreateSubNbt("CBOwner").putString("Owner", player.getUuidAsString());
-			this.setCustomName(this.getName().copy().append(Text.literal("§a属于§6"+player.getName().getString()+"§r")));
+			this.setCustomName(this.getName().copy().setStyle(this.getName().getStyle().withItalic(false)).append(Text.literal("§a属于§6"+player.getName().getString()+"§r")));
 		}
 	}
 }
