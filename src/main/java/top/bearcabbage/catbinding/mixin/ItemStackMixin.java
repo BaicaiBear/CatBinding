@@ -1,5 +1,6 @@
 package top.bearcabbage.catbinding.mixin;
 
+import io.ejekta.bountiful.content.BountyItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -38,7 +39,8 @@ public abstract class ItemStackMixin {
 	private void beforeInventoryTick(World world, Entity entity, int slot, boolean selected, CallbackInfo info) {
 		if (isItemBound(this.getItem(),this.getSubNbt("display")) && this.getSubNbt("CBOwner")==null && entity instanceof ServerPlayerEntity player && !player.hasPermissionLevel(2)) {
 			this.getOrCreateSubNbt("CBOwner").putString("Owner", player.getUuidAsString());
-			this.setCustomName(this.getName().copy().setStyle(this.getName().getStyle().withItalic(false)).append(Text.literal("§a属于§6"+player.getName().getString()+"§r")));
+			this.getOrCreateSubNbt("CBOwner").putString("OwnerName", player.getName().getString());
+//			if(!(this.getItem() instanceof BountyItem)) this.setCustomName(this.getName().copy().setStyle(this.getName().getStyle().withItalic(false)).append(Text.literal("§a属于§6"+player.getName().getString()+"§r")));
 		}
 	}
 }
